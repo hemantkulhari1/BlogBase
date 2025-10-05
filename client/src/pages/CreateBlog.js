@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import axios from 'axios'
+import API from "../api";
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ const CreateBlog = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const { data } = await axios.post("/api/v1/blog/create-blog", {
+            const { data } = await API.post("/api/v1/blog/create-blog", {
                 title: inputs.title,
                 description: inputs.description,
                 image: inputs.image,

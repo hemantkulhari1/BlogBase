@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Box, Typography, TextField, Button } from "@mui/material";
-import axios from 'axios';
+import API from "../api";
 import {useDispatch} from 'react-redux';
 import {authActions} from "../redux/store";
 import toast from 'react-hot-toast';
@@ -29,7 +29,7 @@ const handleChange = (e) => {
 const handleSubmit = async (e) => {
   e.preventDefault();
   try {
-    const { data } = await axios.post("/api/v1/user/login", {
+    const { data } = await API.post("/api/v1/user/login", {
      
       email: inputs.email,
       password: inputs.password,
