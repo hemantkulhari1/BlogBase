@@ -30,6 +30,10 @@ app.use('/api/v1/blog', blogRoutes);
 //Port
 const PORT = process.env.PORT || 8080
 
+app.get("/", (req, res) => {
+  res.send("🚀 BlogBase API is live!");
+});
+
 //listen
 app.listen(8080, () => {
   console.log(
