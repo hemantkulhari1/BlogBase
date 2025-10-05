@@ -1,9 +1,5 @@
 import React, { useState, useEffect } from "react";
 import API from "../api";
-<<<<<<< HEAD
-=======
-
->>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
 import BlogCard from "../components/BlogCard";
 
 const UserBlogs = () => {
