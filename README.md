@@ -27,10 +27,3 @@ A full-stack MERN (MongoDB, Express.js, React, Node.js) stack blogging platform 
 * **Mongoose**: An object data modeling (ODM) library for MongoDB and Node.js.
 
 ---
-
-## ⚙️ How to Run Locally
-
-### Prerequisites
-* Node.js (LTS version recommended)
-* npm or yarn
-* MongoDB installed and running, or a connection string to a cloud database (e.g., MongoDB Atlas)
