@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import {useNavigate} from 'react-router-dom';
 import { Box, Typography, TextField, Button } from "@mui/material";
 import API from "../api";
+<<<<<<< HEAD
+=======
+
+>>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
 import toast from 'react-hot-toast';
 
 const Register = () => {

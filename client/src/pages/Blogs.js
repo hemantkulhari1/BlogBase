@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
+<<<<<<< HEAD
 import API from "../api";
+=======
+import API from "../api"; // adjust path if your file is in a subfolder
+>>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
 import BlogCard from "../components/BlogCard";
 
 const Blogs = () => {
