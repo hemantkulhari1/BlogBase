@@ -9,19 +9,34 @@
   "scripts": {
     "start": "node server.js",
     "server": "nodemon server.js",
-    "client" : "npm start --prefix ./client",
+    "client": "npm start --prefix ./client",
     "dev": "concurrently \"npm run server\" \"npm run client\""
-
   },
   "dependencies": {
+    "@clerk/clerk-react": "^5.53.5",
+    "@clerk/express": "^1.7.44",
+    "@headlessui/react": "^2.2.9",
+    "@mui/material": "^7.3.5",
     "bcrypt": "^6.0.0",
     "colors": "^1.4.0",
+    "compression": "^1.8.1",
     "concurrently": "^9.2.0",
     "cors": "^2.8.5",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "express-rate-limit": "^8.2.1",
+    "framer-motion": "^12.23.24",
+    "helmet": "^8.1.0",
     "mongoose": "^8.17.1",
     "morgan": "^1.10.1",
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.10",
+    "react-icons": "^5.5.0",
+    "react-router-dom": "^7.9.5",
+    "react-window": "^2.2.2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.16"
   }
 }

@@ -1,142 +1,56 @@
-import React, { useState, useEffect } from "react";
+// client/src/pages/BlogDetails.js
+import React, { useEffect, useState } from "react";
 import API from "../api";
-<<<<<<< HEAD
+import { useParams, useNavigate } from "react-router-dom";
+import { Container, Box, Typography, Chip, Button } from "@mui/material";
+import PageTransition from "../components/PageTransition";
 
-=======
->>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
-import { useNavigate,useParams } from 'react-router-dom'
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
-import toast from 'react-hot-toast';
+export default function BlogDetails() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [blog, setBlog] = useState(null);
 
-const BlogDetails = () => {
-    const [blog, setBlog] = useState({});
-    const id = useParams().id;
-    const navigate = useNavigate();
-     const [inputs, setInputs] = useState({
-     });
+  useEffect(() => {
+    (async () => {
+      try {
+        const { data } = await API.get(`/api/v1/blog/get-blog/${id}`);
+        if (data?.success) setBlog(data.blog);
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [id]);
 
-    // get blog details
-    const getBlogDetail = async () => {
-        try {
-            const { data } = await API.get(`/api/v1/blog/get-blog/${id}`);
-            if (data?.success) {
-                setBlog(data?.blog);
-                setInputs({
-            title:data?.blog.title,
-            description: data?.blog.description,
-            image: data?.blog.image
-        })
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
+  if (!blog) return <Container sx={{ mt: 6 }}>Loading...</Container>;
 
-    useEffect(() => {
-        getBlogDetail(); 
-    }, [id]);
+  return (
+    <PageTransition>
+      <Container sx={{ mt: 6, mb: 8 }}>
+        <Box sx={{ borderRadius: 2, overflow: "hidden", boxShadow: 6 }}>
+          <Box component="img" src={blog.image} alt={blog.title} sx={{ width: "100%", height: { xs: 220, md: 380 }, objectFit: "cover" }} />
+        </Box>
 
-   
-    //input change
-    const handleChange = (e) => {
-        setInputs(prevState => ({
-            ...prevState,
-            [e.target.name]: e.target.value
-        }))
-    }
-    //form
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const { data } = await API.put(`/api/v1/blog/update-blog/${id}`, {
-                title: inputs.title,
-                description: inputs.description,
-                image: inputs.image,
-                user: id,
-            });
-            if (data?.success) {
-                toast.success("Blog Updated");
-                navigate("/my-blogs");
-            }
-        } catch (error) {
-            console.log(error);
-        }
-    };
-    console.log(blog);
-    return (
-        <v>
-           <form onSubmit={handleSubmit}>
-            <Box
-                width={"50%"}
-                border={3}
-                borderRadius={10}
-                padding={3}
-                margin="auto"
-                boxShadow={"10px 10px 20px #ccc"}
-                display="flex"
-                flexDirection={"column"}
-                marginTop="30px"
-            >
-                <Typography
-                    variant="h2"
-                    textAlign={"center"}
-                    fontWeight="bold"
-                    padding={3}
-                    color="gray"
-                >
-                    Create A Post
-                </Typography>
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Title
-                </InputLabel>
-                <TextField
-                    name="title"
-                    value={inputs.title}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Description
-                </InputLabel>
+        <Box sx={{ mt: 3 }}>
+          <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+            <Chip label={blog?.tag || "General"} color="secondary" />
+            <Typography variant="caption" color="text.secondary">{new Date(blog.createdAt).toLocaleDateString()}</Typography>
+          </Box>
+          <Typography variant="h4" sx={{ mt: 2, fontWeight: 800 }}>{blog.title}</Typography>
+          <Typography variant="subtitle1" sx={{ mt: 1, color: "text.secondary" }}>{blog.description}</Typography>
 
+          <Box sx={{ mt: 3 }}>
+            <div dangerouslySetInnerHTML={{ __html: blog.content || "<p>No content</p>" }} className="post-rich" />
+          </Box>
 
-                <TextField
-                    name="description"
-                    value={inputs.description}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Image URL
-                </InputLabel>
+          <Box sx={{ mt: 4, display: "flex", gap: 2 }}>
+            <Button variant="outlined" onClick={() => navigate("/my-blogs")}>My posts</Button>
+            {localStorage.getItem("userId") === blog?.user?._id && (
+              <Button variant="contained" color="primary" onClick={() => navigate(`/create-blog?id=${id}`)}>Edit</Button>
+            )}
+          </Box>
+        </Box>
+      </Container>
+    </PageTransition>
 
-
-                <TextField
-                    name="image"
-                    value={inputs.image}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-
-                <Button type="submit" color="warning" variant="contained" >
-                    UPDATE
-                </Button>
-            </Box>
-        </form>
-        </v>
-    );
-};
-
-export default BlogDetails;
+  );
+}

@@ -1,119 +1,137 @@
 import React, { useState } from "react";
+import { Box, TextField, Typography, Button, Paper } from "@mui/material";
 import API from "../api";
-<<<<<<< HEAD
-=======
+import { useNavigate } from "react-router-dom";
+import PageTransition from "../components/PageTransition";
+import { useUser } from "@clerk/clerk-react"; // ✅ Import Clerk user
 
->>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
-import { useNavigate } from 'react-router-dom'
-import { Box, Button, InputLabel, TextField, Typography } from "@mui/material";
-import toast from 'react-hot-toast';
+export default function CreateBlog() {
+  const navigate = useNavigate();
+  const { user } = useUser(); // ✅ Get Clerk user
 
-const CreateBlog = () => {
-    const id = localStorage.getItem('userId')
-    const navigate = useNavigate()
-    const [inputs, setInputs] = useState({
-        title: "",
-        description: "",
-        image: "",
-    });
-    //input change
-    const handleChange = (e) => {
-        setInputs(prevState => ({
-            ...prevState,
-            [e.target.name]: e.target.value
-        }))
+  const [inputs, setInputs] = useState({
+    title: "",
+    excerpt: "",
+    tag: "",
+    image: "",
+    content: "",
+  });
+
+  const handleChange = (e) => {
+    setInputs({ ...inputs, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async () => {
+  try {
+    if (!user) {
+      console.log("User not logged in");
+      return;
     }
-    //form
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const { data } = await API.post("/api/v1/blog/create-blog", {
-                title: inputs.title,
-                description: inputs.description,
-                image: inputs.image,
-                user: id,
-            });
-            if (data?.success) {
-                toast.success("Blog Created");
-                navigate("/my-blogs");
-            }
-        } catch (error) {
-            console.log(error);
-        }
+
+    const payload = {
+      title: inputs.title,
+      excerpt: inputs.excerpt,
+      category: inputs.tag,
+      image: inputs.image || "https://via.placeholder.com/800x400",
+      content: inputs.content,
+      author: user.id, // ✅ Correct
     };
 
-    return (
-        <form onSubmit={handleSubmit}>
-            <Box
-                width={"50%"}
-                border={3}
-                borderRadius={10}
-                padding={3}
-                margin="auto"
-                boxShadow={"10px 10px 20px #ccc"}
-                display="flex"
-                flexDirection={"column"}
-                marginTop="30px"
-            >
-                <Typography
-                    variant="h2"
-                    textAlign={"center"}
-                    fontWeight="bold"
-                    padding={3}
-                    color="gray"
-                >
-                    Create A Post
-                </Typography>
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Title
-                </InputLabel>
-                <TextField
-                    name="title"
-                    value={inputs.title}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Description
-                </InputLabel>
+    console.log("SENDING =>", payload); // Debug
 
+    const { data } = await API.post("/api/v1/blog/create-blog", payload);
 
-                <TextField
-                    name="description"
-                    value={inputs.description}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-                <InputLabel
-                    sx={{ mb: 1, mt: 2, fontSize: "24px", fontWeight: "bold" }}
-                >
-                    Image URL
-                </InputLabel>
-
-
-                <TextField
-                    name="image"
-                    value={inputs.image}
-                    onChange={handleChange}
-                    margin="normal"
-                    variant="outlined"
-                    required
-                />
-
-                <Button type="submit" color="primary" variant="contained" >
-                    SUBMIT
-                </Button>
-            </Box>
-        </form>
-    );
+    if (data?.success) navigate("/blogs");
+  } catch (error) {
+    console.log("Error:", error.response?.data || error);
+  }
 };
 
-export default CreateBlog;
+  return (
+    <PageTransition>
+      <Box
+        sx={{
+          minHeight: "100vh",
+          px: 3,
+          py: 6,
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          background: "linear-gradient(180deg, #0E1318, #1A2430)",
+        }}
+      >
+        <Paper
+          elevation={10}
+          sx={{
+            width: "100%",
+            maxWidth: "800px",
+            p: 4,
+            borderRadius: "18px",
+            background: "rgba(255,255,255,0.04)",
+            backdropFilter: "blur(12px)",
+            border: "1px solid rgba(212,175,55,0.25)",
+          }}
+        >
+          <Typography
+            variant="h5"
+            sx={{
+              mb: 4,
+              fontWeight: 700,
+              color: "#D4AF37",
+              textAlign: "center",
+            }}
+          >
+            Create New Post
+          </Typography>
+
+          {["title", "excerpt", "tag", "image", "content"].map((field, index) => (
+            <TextField
+              key={index}
+              label={
+                field === "tag"
+                  ? "Tag / Category"
+                  : field === "content"
+                  ? "Content (HTML / Markdown)"
+                  : field.charAt(0).toUpperCase() + field.slice(1)
+              }
+              variant="outlined"
+              fullWidth
+              name={field}
+              value={inputs[field]}
+              onChange={handleChange}
+              multiline={field === "content"}
+              rows={field === "content" ? 8 : 1}
+              sx={{ mb: 3 }}
+              InputProps={{
+                style: {
+                  background: "#1A2430",
+                  color: "white",
+                  borderRadius: "10px",
+                },
+              }}
+              InputLabelProps={{
+                style: { color: "#A7A7A7" },
+              }}
+            />
+          ))}
+
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={handleSubmit}
+            sx={{
+              background: "#D4AF37",
+              color: "#1A2430",
+              fontWeight: 600,
+              py: 1.4,
+              borderRadius: "10px",
+              "&:hover": { background: "#e5c472" },
+            }}
+          >
+            Publish
+          </Button>
+        </Paper>
+      </Box>
+    </PageTransition>
+  );
+}

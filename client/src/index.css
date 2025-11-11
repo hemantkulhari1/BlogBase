@@ -1,9 +1,118 @@
-*{
+/* client/src/index.css */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+
+/* Ensure app takes full height for sticky footer layout */
+html, body, #root {
+  height: 100%;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
 }
 
-body { 
-  font-family: "roboto",sans-serif;
+/* Enable smooth scroll everywhere */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Remove overflow jumpiness when using modals */
+body {
+  background-color: #0F141A;
+  color: #EAEAEA;
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: 'Inter', sans-serif;
+  background: linear-gradient(180deg, #2C3E50 0%, #1E2A38 100%);
+  color: #EAEAEA;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Ensure all containers and MUI papers match dark mode */
+.MuiContainer-root,
+.MuiPaper-root {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Typography styles */
+h1, h2, h3, h4, h5, h6 {
+  color: #F1F1F1;
+}
+
+p {
+  color: #E0E0E0;
+}
+
+/* Links */
+a {
+  color: #D4AF37;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: #F1C94A;
+}
+
+/* Blog post rich text */
+.post-rich p {
+  margin: 0 0 1em;
+  line-height: 1.8;
+  color: #EAEAEA;
+}
+
+.post-rich img {
+  max-width: 100%;
+  border-radius: 10px;
+  display: block;
+  margin: 16px 0;
+}
+
+/* Container utility */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+/* Smooth scroll for better UX */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Optional: fade in animation for content */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease forwards;
+}
+
+/* 🔧 Make all input placeholders visible on dark backgrounds */
+input::placeholder,
+textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important; /* light gray */
+}
+
+input, textarea {
+  color: #fff !important;
+  background-color: #1E2A38 !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+input:focus, textarea:focus {
+  border-color: #D4AF37 !important; /* your golden accent */
+  outline: none;
 }

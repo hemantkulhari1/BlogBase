@@ -1,109 +1,51 @@
-import React, { useState } from 'react';
-import {useNavigate} from 'react-router-dom';
-import { Box, Typography, TextField, Button } from "@mui/material";
-import API from "../api";
-<<<<<<< HEAD
-=======
+import React, { useEffect } from "react";
+import { SignIn, useUser } from "@clerk/clerk-react";
+import { Box } from "@mui/material";
+import PageTransition from "../components/PageTransition";
 
->>>>>>> b7f1da0 (Fix API imports and add axios baseURL for deployment)
-import {useDispatch} from 'react-redux';
-import {authActions} from "../redux/store";
-import toast from 'react-hot-toast';
+export default function Login() {
+  const { isSignedIn, user } = useUser();
 
-const Login = () => {
-  
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
-  const [inputs,setInputs] =useState({
-  
-    email: '',
-    password: ''
-  })
-
-  //handle input change
-const handleChange = (e) => {
-  setInputs((prevState) => ({
-    ...prevState,
-    [e.target.name]: e.target.value,
-  }));
-};
-
-
-//form handle
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  try {
-    const { data } = await API.post("/api/v1/user/login", {
-     
-      email: inputs.email,
-      password: inputs.password,
-    });
-    if (data.success) {
-      localStorage.setItem("userId",data?.user._id);
-      dispatch(authActions.login());
-
-      toast.success("User Login Successfully");
-      navigate("/");
+  useEffect(() => {
+    if (isSignedIn && user) {
+      // ✅ Store user ID for backend usage
+      localStorage.setItem("userId", user.id);
+      window.location.href = "/blogs"; // redirect after login
     }
-  } catch (error) {
-    console.log(error);
-  }
-};
+  }, [isSignedIn, user]);
+
   return (
-    <>
-    <form onSubmit={handleSubmit}>
-
+    <PageTransition>
       <Box
-        maxWidth={450}
-        display="flex"
-        flexDirection="column"
-        alignItems="center"
-        justifyContent="center"
-        margin="auto"
-        marginTop={5}
-        boxShadow="10px 10px 20px #ccc"
-        padding={3}
-        borderRadius={5}
+        sx={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "linear-gradient(to bottom, #2C3140, #3D4353)",
+        }}
       >
-        <Typography variant='h4' sx={{ textTransform: "uppercase" }} padding={3} textAlign='center'>Login</Typography>
-
-        <TextField
-          placeholder="email"
-          value= {inputs.email}
-          onChange={handleChange}
-          name="email"
-          margin="normal"
-          type={"email"}
-          required
+        <SignIn
+          path="/login"
+          routing="path"
+          signUpUrl="/register"
+          appearance={{
+            elements: {
+              card: {
+                backgroundColor: "#2C3140",
+                boxShadow: "0 4px 20px rgba(0,0,0,0.3)",
+                borderRadius: "12px",
+              },
+            },
+            variables: {
+              colorPrimary: "#A3B087",
+              colorBackground: "#2C3140",
+              colorText: "#fff",
+              colorTextSecondary: "#d9d9d9",
+            },
+          }}
         />
-
-        <TextField
-          placeholder="password"
-          value= {inputs.password}
-          onChange={handleChange}
-          name="password"
-          margin="normal"
-          type={"password"}
-          required
-        />
-        <Button
-          type="submit"
-          sx={{ borderRadius: 3, marginTop: 3 }}
-          variant="contained"
-          color="primary"
-        >
-          Submit
-        </Button>
-
-        <Button 
-          onClick={() => navigate("/register")}
-        sx={{ borderRadius: 3, marginTop: 3 }}>
-          Not a user? Please Register
-        </Button>
       </Box>
-      </form>
-    </>
+    </PageTransition>
   );
-};
-
-export default Login;
+}
