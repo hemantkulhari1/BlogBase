@@ -1,10 +1,7 @@
 // client/src/pages/UserBlogs.js
 import React, { useEffect, useState } from "react";
 import API from "../api";
-<<<<<<< HEAD
 import { Container, Grid, Typography, Box, Button } from "@mui/material";
-=======
->>>>>>> a99696e02ae51283a79159b92a28824662339914
 import BlogCard from "../components/BlogCard";
 import PageTransition from "../components/PageTransition";
 
