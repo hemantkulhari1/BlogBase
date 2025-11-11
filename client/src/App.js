@@ -97,22 +97,23 @@ function App() {
             />
 
             {/* ✅ Protected route with Clerk */}
-            <Route
-              path="/create-blog"
-              element={
-                <>
-                  <SignedIn>
-                    <PageTransition>
-                      <CreateBlog />
-                    </PageTransition>
-                  </SignedIn>
+           <Route
+  path="/create-blog"
+  element={
+    <SignedIn>
+      <CreateBlog />
+    </SignedIn>
+  }
+/>
+<Route
+  path="/create-blog"
+  element={
+    <SignedOut>
+      <RedirectToSignIn />
+    </SignedOut>
+  }
+/>
 
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              }
-            />
 
             <Route
               path="/my-blogs"
