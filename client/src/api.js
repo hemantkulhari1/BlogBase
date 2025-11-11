@@ -1,8 +1,8 @@
-// client/src/api.js
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: process.env.REACT_APP_API_URL || "http://localhost:8080",
+  baseURL: "https://blogbase-s16g.onrender.com" // <-- Your backend
 });
 
 export default API;
+
